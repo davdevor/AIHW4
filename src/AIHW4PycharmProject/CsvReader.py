@@ -1,8 +1,7 @@
 import csv
-def readCsv(fileName):
+def readCsv(fileName,attributes):
     file = open(fileName,mode='r',encoding='UTF-8')
     reader = csv.DictReader(file, delimiter=';')
-    attributes = ['studytime','failures','paid','higher','freetime','absences','G1','G2','internet','schoolsup','G3']
     records = []
     tempDict = {}
     for x in reader:
