@@ -1,29 +1,43 @@
 import random
 import ANN
 import CsvReader
-
+import sys
+from joblib import Parallel, delayed
 
 class GA:
 
     def __init__(self):
-        self.attributes = ['studytime','failures','paid','higher','freetime','absences','G1','G2','internet','schoolsup','G3']
-        self.popSize = 200
+        self.numAttributes = ['studytime','failures','freetime','absences','G1','G2','G3']
+        self.textAttributes = ['paid','higher','internet','schoolsup']
+        self.popSize = 20
         self.population = []
         self.children = [0 for x in range(self.popSize)]
         self.fitness = []
-        self.weights = 33;
+        self.weights = 55;
         self.ANN = ANN.ANN()
-        self.data = CsvReader.readCsv('../student-mat.csv',self.attributes)
+        self.data = CsvReader.readCsv('../student-mat.csv',self.numAttributes,self.textAttributes)
         self.results = []
         self.averageFitness = 0.0
+        self.best = sys.maxsize
 
     def computeFitness(self):
-        for x in range(self.popSize):
-            t1 = int(self.results[x][1])
-            t2 = self.results[x][0]
-            fitness = float(t1-t2)
+        i = 0
+        for x in self.results:
+            fitness = 0.0
+            for y in x:
+
+                t1 = int(y[1])
+                t2 = y[0]
+                fitness += abs(float(t1-t2))
+            fitness /= (len(x))
+
+            if(fitness < self.best):
+                self.best = fitness
+                print(self.population[i])
+                print(fitness)
             self.averageFitness += fitness
             self.fitness.append(fitness)
+            i+=1
         self.averageFitness /= self.popSize
 
     def offspring(self):
@@ -55,15 +69,16 @@ class GA:
                 temppopulation.append(self.population[i])
                 index += 1
         self.population = temppopulation
-
+    # this method randomly mutates the population by adding or subtracting a value to
     def mutation(self):
+
         for x in self.population:
             numchanges = random.randint(1, 33)
             for y in range(numchanges):
                 # popsition to change
                 pos = random.randint(0,self.weights-1)
                 # how much to change by
-                change = random.uniform(0, 1)
+                change = random.uniform(0, .01)
                 # if 1 add else subtract
                 operator = random.randint(0, 1)
                 if(operator == 1):
@@ -71,29 +86,39 @@ class GA:
                 else:
                     x[pos] -= change
 
+    # initializes the population to random values
     def initPopulattion(self):
         tempweights = []
         for x in range(self.popSize):
             for y in range(self.weights):
-                tempweights.append(random.uniform(0, 1))
+                tempweights.append(random.uniform(-.5, .5))
             self.population.append(tempweights)
             tempweights=[]
 
-    def clear(self):
+    # this method clears data that needs to be reset
+    def clearData(self):
         self.fitness.clear()
         self.results.clear()
-        self.children.clear()
+        for x in range(self.popSize):
+            self.children[x] = 0
         self.averageFitness = 0.0
 
     def runGA(self):
         self.initPopulattion()
+        tempattributes = self.numAttributes
+        tempattributes.remove("G3")
+        for x in self.textAttributes:
+            tempattributes.append(x)
 
-        for x in range(self.popSize):
-            output = [self.ANN.run(self.population[x],self.data[0]), self.data[0]['G3']]
-            self.results.append(output)
-        self.computeFitness()
-        self.offspring()
-        self.createNewPopulation()
-        self.mutation()
-        self.clear()
+        for iterations in range(1000):
+            output = []
+            for x in range(self.popSize):
+                for i in range(int(len(self.data) * .7)):
+                    output.append([self.ANN.run(self.population[x], self.data[i], tempattributes), self.data[i]['G3']])
+                self.results.append(output)
+            self.computeFitness()
+            self.offspring()
+            self.createNewPopulation()
+            self.mutation()
+            self.clearData()
 
