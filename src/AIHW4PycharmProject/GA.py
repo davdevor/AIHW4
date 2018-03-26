@@ -2,7 +2,7 @@ import random
 import ANN
 import CsvReader
 import sys
-from joblib import Parallel, delayed
+
 
 class GA:
 
@@ -66,9 +66,13 @@ class GA:
         temppopulation = []
         for i in range(self.popSize):
             for j in range(self.children[i]):
-                temppopulation.append(self.population[i])
+                temp = []
+                for k in range(self.weights):
+                    temp.append(self.population[i][k])
                 index += 1
+                temppopulation.append(temp)
         self.population = temppopulation
+
     # this method randomly mutates the population by adding or subtracting a value to
     def mutation(self):
 
@@ -91,7 +95,7 @@ class GA:
         tempweights = []
         for x in range(self.popSize):
             for y in range(self.weights):
-                tempweights.append(random.uniform(-.5, .5))
+                tempweights.append(random.uniform(-.9, .9))
             self.population.append(tempweights)
             tempweights=[]
 
