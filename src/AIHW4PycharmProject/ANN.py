@@ -34,7 +34,7 @@ class ANN:
         tempweights = []
         numnodes = len(self.nodes)-1
         for x in range(numnodes):
-            for y in attributes:
+            for y in range(len(attributes)):
                 temp.append(data[y])
             self.nodes[x].setActivation(temp)
             for y in range(0+x,len(weights)-numnodes,numnodes):
@@ -60,4 +60,4 @@ class ANN:
         self.nodes[-1].setActivation(output)
         self.nodes[-1].activatePerceptron(tempweights,len(output))
 
-        return self.nodes[-1].getOutput() *19
+        return self.nodes[-1].getOutput()

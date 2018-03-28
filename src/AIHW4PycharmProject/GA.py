@@ -2,7 +2,7 @@ import random
 import ANN
 import CsvReader
 import sys
-from joblib import Parallel, delayed
+from sklearn.preprocessing import StandardScaler
 
 class GA:
 
@@ -20,14 +20,22 @@ class GA:
         self.averageFitness = 0.0
         self.best = sys.maxsize
 
+    def getOutput(self,num):
+        x = .05
+        for y in range(1, 20):
+            if num < x:
+                return y
+            else:
+                x = .05 * (y+1)
+        return 20
     def computeFitness(self):
         i = 0
         for x in self.results:
             fitness = 0.0
             for y in x:
 
-                t1 = int(y[1])
-                t2 = y[0]
+                t1 = y[1]
+                t2 = self.getOutput(y[0])
                 fitness += abs(float(t1-t2))
             fitness /= (len(x))
 
@@ -78,7 +86,7 @@ class GA:
                 # popsition to change
                 pos = random.randint(0,self.weights-1)
                 # how much to change by
-                change = random.uniform(0, .01)
+                change = random.uniform(0, .001)
                 # if 1 add else subtract
                 operator = random.randint(0, 1)
                 if(operator == 1):
@@ -91,7 +99,7 @@ class GA:
         tempweights = []
         for x in range(self.popSize):
             for y in range(self.weights):
-                tempweights.append(random.uniform(-.5, .5))
+                tempweights.append(random.uniform(-.001, .001))
             self.population.append(tempweights)
             tempweights=[]
 
@@ -109,12 +117,26 @@ class GA:
         tempattributes.remove("G3")
         for x in self.textAttributes:
             tempattributes.append(x)
+        temp_data = []
+        temp_list = []
+        temp_ans = []
+        for x in self.data:
+            for y in tempattributes:
+                temp_list.append(x[y])
+            temp_ans.append(x['G3'])
+            temp_data.append(temp_list)
+            temp_list = []
+        self.ans = temp_ans
+        self.data = temp_data
+        scaler = StandardScaler()
+        scaler.fit(self.data)
+        self.data = scaler.transform(self.data)
 
         for iterations in range(1000):
             output = []
             for x in range(self.popSize):
                 for i in range(int(len(self.data) * .7)):
-                    output.append([self.ANN.run(self.population[x], self.data[i], tempattributes), self.data[i]['G3']])
+                    output.append([self.ANN.run(self.population[x], self.data[i], tempattributes), self.ans[i]])
                 self.results.append(output)
             self.computeFitness()
             self.offspring()
