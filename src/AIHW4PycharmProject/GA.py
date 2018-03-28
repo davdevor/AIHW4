@@ -4,6 +4,7 @@ import CsvReader
 import sys
 from sklearn.preprocessing import StandardScaler
 
+
 class GA:
 
     def __init__(self):
@@ -19,7 +20,12 @@ class GA:
         self.results = []
         self.averageFitness = 0.0
         self.best = sys.maxsize
+        self.ans = []
 
+    # the neural net outputs a number between 0 and 1
+    # so I divided 1 into 20 sections for each grade possible
+    # if the output is in one of thoses sections then it is the number corresponding to which section
+    # section1 returns 1 ...
     def getOutput(self,num):
         x = .05
         for y in range(1, 20):
@@ -28,6 +34,9 @@ class GA:
             else:
                 x = .05 * (y+1)
         return 20
+
+    # the fitness of a member is how far off the output for that member is from the actual output
+    # for every record in the data
     def computeFitness(self):
         i = 0
         for x in self.results:
@@ -81,7 +90,7 @@ class GA:
                 temppopulation.append(temp)
         self.population = temppopulation
 
-    # this method randomly mutates the population by adding or subtracting a value to
+    # this method randomly mutates the population by adding or subtracting a value to a position in one of the members
     def mutation(self):
 
         for x in self.population:
@@ -116,6 +125,7 @@ class GA:
         self.averageFitness = 0.0
 
     def runGA(self):
+        # setup to run the GA
         self.initPopulattion()
         tempattributes = self.numAttributes
         tempattributes.remove("G3")
@@ -137,12 +147,16 @@ class GA:
                 break
         self.ans = temp_ans
         self.data = temp_data
+
+        # transforming the data to normalize it for the neural network
         scaler = StandardScaler()
         scaler.fit(self.data)
         self.data = scaler.transform(self.data)
 
+        # start running the ga
         for iterations in range(1000):
             output = []
+            # for every memeber
             for x in range(self.popSize):
                 for i in range(int(len(self.data) * .7)):
                     output.append([self.ANN.run(self.population[x], self.data[i], tempattributes), self.ans[i]])

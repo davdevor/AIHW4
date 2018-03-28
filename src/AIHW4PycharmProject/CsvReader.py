@@ -1,6 +1,7 @@
 import csv
 
-
+# this method reads in the csv file using DictReader
+# it get the attributes you specify
 def readCsv(fileName,numattributes,textAttributes):
     file = open(fileName,mode='r',encoding='UTF-8')
     reader = csv.DictReader(file, delimiter=';')

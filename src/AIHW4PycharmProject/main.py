@@ -1,8 +1,11 @@
 import GA
 import ANN
 import CsvReader
-import random
-import math
+
+# the neural net outputs a number between 0 and 1
+# so I divided 1 into 20 sections for each grade possible
+# if the output is in one of thoses sections then it is the number corresponding to which section
+# section1 returns 1 ...
 def getOutput( num):
     x = .05
     for y in range(1,20):
@@ -11,9 +14,13 @@ def getOutput( num):
         else:
             x = .05 * (y+1)
     return float(20)
+
+
+# used for testing if true test else run the ga
 if True:
     numAttributes = ['studytime','failures','freetime','absences','G1','G2','G3']
     textAttributes = ['paid','higher','internet','schoolsup']
+    # the weights that my neural net outputed
     weights = [0.23446921481134278, -0.4655658716633574, -0.30418652121661094, -0.299033011525666, -0.43757420182950846,
      -0.31224837121935034, -0.1765878105032997, 0.3303006826025073, -0.3448749617667759, -0.3889669751822878,
      -0.22397420925459965, -0.3627273448602485, 0.4208485966198059, -0.2621674766880082, -0.29164762271334743,

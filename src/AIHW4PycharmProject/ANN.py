@@ -1,5 +1,6 @@
 import math
 
+
 class Perceptron:
 
     def __init__(self,act):
@@ -43,6 +44,7 @@ class ANN:
             weights = []
         return nodes
 
+    # ssets up the layers and initilizes nodes in each layer
     def init_layers(self):
         layers = []
         for x in range(self.num_layers):
@@ -53,6 +55,7 @@ class ANN:
     def run(self,weights,data,attributes):
         temp = []
         tempweights = []
+        # get input for first layer
         for y in range(len(attributes)):
             temp.append(data[y])
 
@@ -61,6 +64,7 @@ class ANN:
         for z in range(len(self.layers)-1):
             for x in range(len(self.layers[z])):
                 self.layers[z][x].setActivation(temp)
+                # get the weights connected to that node
                 for i in range(0+x*(z+1),len(weights)-self.nodes_per_layer,self.nodes_per_layer):
                     tempweights.append(weights[i])
                 self.layers[z][x].activatePerceptron(tempweights,len(attributes))
@@ -78,4 +82,5 @@ class ANN:
         self.layers[-1].setActivation(tempweights)
         self.layers[-1].activatePerceptron(tempweights,len(temp))
 
+        # this is sthe output of the final node
         return self.layers[-1].getOutput()
