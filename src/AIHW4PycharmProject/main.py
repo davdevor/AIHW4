@@ -11,7 +11,7 @@ def getOutput( num):
         else:
             x = .05 * (y+1)
     return float(20)
-if False:
+if True:
     numAttributes = ['studytime','failures','freetime','absences','G1','G2','G3']
     textAttributes = ['paid','higher','internet','schoolsup']
     weights = [0.23446921481134278, -0.4655658716633574, -0.30418652121661094, -0.299033011525666, -0.43757420182950846,
@@ -84,7 +84,7 @@ if False:
         tempattributes.append(x)
     temp_list = []
     temp_data = []
-    ans = []-
+    ans = []
     for x in data:
         for y in tempattributes:
             temp_list.append(x[y])
