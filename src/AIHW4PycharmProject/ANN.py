@@ -27,21 +27,32 @@ class Perceptron:
 
 class ANN:
     def __init__(self):
-        self.nodes = [Perceptron([0 for x in range(10)]) for x in range(6)]
+        self.nodes = self.init_nodes()
 
+    def init_nodes(self):
+        nodes = []
+        for x in range(11):
+            weights = []
+            for y in range(10):
+                weights.append(0)
+            node = Perceptron(weights)
+            nodes.append(node)
+            weights = []
+        return nodes
     def run(self,weights,data,attributes):
         temp = []
         tempweights = []
         numnodes = len(self.nodes)-1
+        for y in range(len(attributes)):
+            temp.append(data[y])
         for x in range(numnodes):
-            for y in range(len(attributes)):
-                temp.append(data[y])
+
             self.nodes[x].setActivation(temp)
             for y in range(0+x,len(weights)-numnodes,numnodes):
                 tempweights.append(weights[y])
             self.nodes[x].setActivation(temp)
             self.nodes[x].activatePerceptron(tempweights,len(attributes))
-            temp = []
+            #temp = []
             tempweights =[]
         output = []
         for x in range(numnodes):

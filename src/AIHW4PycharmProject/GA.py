@@ -13,7 +13,7 @@ class GA:
         self.population = []
         self.children = [0 for x in range(self.popSize)]
         self.fitness = []
-        self.weights = 55;
+        self.weights = 110;
         self.ANN = ANN.ANN()
         self.data = CsvReader.readCsv('../student-mat.csv',self.numAttributes,self.textAttributes)
         self.results = []
