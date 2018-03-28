@@ -13,7 +13,7 @@ class GA:
         self.population = []
         self.children = [0 for x in range(self.popSize)]
         self.fitness = []
-        self.weights = 110;
+        self.weights = 310;
         self.ANN = ANN.ANN()
         self.data = CsvReader.readCsv('../student-mat.csv',self.numAttributes,self.textAttributes)
         self.results = []
@@ -24,7 +24,7 @@ class GA:
         x = .05
         for y in range(1, 20):
             if num < x:
-                return y
+                return y-1
             else:
                 x = .05 * (y+1)
         return 20
@@ -85,12 +85,12 @@ class GA:
     def mutation(self):
 
         for x in self.population:
-            numchanges = random.randint(1, 33)
+            numchanges = random.randint(1, 310)
             for y in range(numchanges):
                 # popsition to change
                 pos = random.randint(0,self.weights-1)
                 # how much to change by
-                change = random.uniform(0, .001)
+                change = random.uniform(0, .01)
                 # if 1 add else subtract
                 operator = random.randint(0, 1)
                 if(operator == 1):
@@ -103,7 +103,7 @@ class GA:
         tempweights = []
         for x in range(self.popSize):
             for y in range(self.weights):
-                tempweights.append(random.uniform(-.001, .001))
+                tempweights.append(random.uniform(-.5, .5))
             self.population.append(tempweights)
             tempweights=[]
 
@@ -124,12 +124,17 @@ class GA:
         temp_data = []
         temp_list = []
         temp_ans = []
+        # get 70% of data
+        j = int(len(self.data)*.7)
         for x in self.data:
             for y in tempattributes:
                 temp_list.append(x[y])
             temp_ans.append(x['G3'])
             temp_data.append(temp_list)
             temp_list = []
+            j-=1
+            if j == 0:
+                break
         self.ans = temp_ans
         self.data = temp_data
         scaler = StandardScaler()
