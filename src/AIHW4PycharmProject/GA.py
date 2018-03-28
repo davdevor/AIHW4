@@ -103,11 +103,7 @@ class GA:
         tempweights = []
         for x in range(self.popSize):
             for y in range(self.weights):
-<<<<<<< HEAD
                 tempweights.append(random.uniform(-.001, .001))
-=======
-                tempweights.append(random.uniform(-.9, .9))
->>>>>>> 8f5ab3c737539681a249599bfffd551405b9a858
             self.population.append(tempweights)
             tempweights=[]
 
