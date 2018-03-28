@@ -74,9 +74,13 @@ class GA:
         temppopulation = []
         for i in range(self.popSize):
             for j in range(self.children[i]):
-                temppopulation.append(self.population[i])
+                temp = []
+                for k in range(self.weights):
+                    temp.append(self.population[i][k])
                 index += 1
+                temppopulation.append(temp)
         self.population = temppopulation
+
     # this method randomly mutates the population by adding or subtracting a value to
     def mutation(self):
 
@@ -99,7 +103,11 @@ class GA:
         tempweights = []
         for x in range(self.popSize):
             for y in range(self.weights):
+<<<<<<< HEAD
                 tempweights.append(random.uniform(-.001, .001))
+=======
+                tempweights.append(random.uniform(-.9, .9))
+>>>>>>> 8f5ab3c737539681a249599bfffd551405b9a858
             self.population.append(tempweights)
             tempweights=[]
 

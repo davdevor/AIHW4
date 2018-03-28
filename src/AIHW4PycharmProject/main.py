@@ -3,6 +3,7 @@ import ANN
 import CsvReader
 import random
 import math
+<<<<<<< HEAD
 
 
 def getOutput( num):
@@ -14,6 +15,8 @@ def getOutput( num):
             x = .05 * (y+1)
     return float(20)
 
+=======
+>>>>>>> 8f5ab3c737539681a249599bfffd551405b9a858
 if False:
     numAttributes = ['studytime','failures','freetime','absences','G1','G2','G3']
     textAttributes = ['paid','higher','internet','schoolsup']
