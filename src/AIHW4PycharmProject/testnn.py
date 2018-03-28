@@ -1,7 +1,12 @@
+# This is just me seeing if I could get the Neural Net to predict the grades using sklearn
+# Multi Layer Perceptron Classifier
+
+
 import CsvReader
-import sys
 from sklearn.preprocessing import StandardScaler
 from sklearn.neural_network import MLPClassifier
+
+
 def test():
     numAttributes = ['studytime','failures','freetime','absences','G1','G2','G3']
     textAttributes = ['paid','higher','internet','schoolsup']
